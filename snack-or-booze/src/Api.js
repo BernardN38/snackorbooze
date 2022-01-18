@@ -19,6 +19,14 @@ class SnackOrBoozeApi {
     const result = await axios.get(`${BASE_API_URL}/drinks`);
     return result.data;
   }
+  static async postDrink(payload){
+    const result = await axios.post(`${BASE_API_URL}/drinks`, payload);
+    return result.data;
+  }
+  static async postSnack(payload){
+    const result = await axios.post(`${BASE_API_URL}/snacks`, payload);
+    return result.data;
+  }
 }
 
 export default SnackOrBoozeApi;

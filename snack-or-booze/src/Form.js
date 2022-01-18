@@ -11,7 +11,7 @@ import {
   Label,
   Input
 } from "reactstrap";
-
+import SnackOrBoozeApi from "./Api"
 /** Form for adding a menu item.
  *
  * Props:
@@ -22,9 +22,9 @@ import {
  *
  */
 
-function AddForm({ newItems, setNewItems }) {
+function AddForm() {
   const [form, setForm] = useState({
-    type: "snacks",
+    type: "snack",
     name: "",
     description: "",
     recipe: "",
@@ -40,10 +40,15 @@ function AddForm({ newItems, setNewItems }) {
     }));
   }
 
-  const handleSubmit = evt => {
+  const handleSubmit = async (evt) => {
     evt.preventDefault();
     let { type, ...data } = form;
-    setNewItems({ ...newItems, [type]:[...newItems[type], data]})
+
+    if (form.type === "snack") {
+      await SnackOrBoozeApi.postSnack(form)
+    } else {
+      await SnackOrBoozeApi.postDrink(form)
+    }
     history.push("/");
   }
 
@@ -70,8 +75,8 @@ function AddForm({ newItems, setNewItems }) {
                 value={type}
                 onChange={handleChange}
               >
-                <option>snacks</option>
-                <option>drinks</option>
+                <option>snack</option>
+                <option>drink</option>
               </Input>
             </FormGroup>
 

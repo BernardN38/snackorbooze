@@ -1,13 +1,21 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Redirect, useParams } from "react-router-dom";
 import { Card, CardBody, CardTitle, CardText } from "reactstrap";
-
-function FoodItem({ items, cantFind }) {
+import SnackOrBoozeApi from "./Api";
+function FoodItem({ cantFind }) {
   const { id } = useParams();
-
-  let snack = items.find(snack => snack.id === id);
+  const [snack,setSnack] = useState({})
+  useEffect(() => {
+    const getSnack = async () => {
+      const apiSnacks = await SnackOrBoozeApi.getSnacks();
+      const apiDrinks = await SnackOrBoozeApi.getDrinks();
+      const items = [...apiSnacks, ...apiDrinks]
+      const displayItem = items.find(item => item.id === id);
+      setSnack(displayItem)
+    }
+    getSnack()
+  }, []);
   if (!snack) return <Redirect to={cantFind} />;
-
   return (
     <section>
       <Card>
@@ -15,7 +23,8 @@ function FoodItem({ items, cantFind }) {
           <CardTitle className="font-weight-bold text-center">
             {snack.name}
           </CardTitle>
-          <CardText className="font-italic">{snack.description}</CardText>
+          <CardText className="font-italic">
+          <b>Description:</b> {snack.description}</CardText>
           <p>
             <b>Recipe:</b> {snack.recipe}
           </p>

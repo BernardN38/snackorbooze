@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import "./FoodMenu.css";
 import {
@@ -7,10 +7,38 @@ import {
   CardTitle,
   CardText,
   ListGroup,
-  ListGroupItem
+  ListGroupItem,
 } from "reactstrap";
-
-function FoodMenu({ food, path }) {
+import SnackOrBoozeApi from "./Api";
+function FoodMenu({ path }) {
+  const [snacks, setSnacks] = useState([]);
+  const [drinks, setDrinks] = useState([]);
+  useEffect(() => {
+    const getFood = async () => {
+      const apiFood = await SnackOrBoozeApi.getSnacks();
+      return setSnacks(apiFood);
+    };
+    const getDrinks = async () => {
+      const apiFood = await SnackOrBoozeApi.getDrinks();
+      return setDrinks(apiFood);
+    };
+    getFood();
+    getDrinks();
+  }, []);
+  const returnSnacks = ()=>{
+    return snacks.map((snack) => (
+      <Link to={`${path}/${snack.id}`} key={snack.id}>
+        <ListGroupItem>{snack.name}</ListGroupItem>
+      </Link>
+    ))
+  };
+  const returnDrinks = ()=>{
+    return drinks.map((snack) => (
+      <Link to={`${path}/${snack.id}`} key={snack.id}>
+        <ListGroupItem>{snack.name}</ListGroupItem>
+      </Link>
+    ))
+  };
   return (
     <section className="col-md-4">
       <Card>
@@ -23,11 +51,7 @@ function FoodMenu({ food, path }) {
             bulk of the card's content.
           </CardText>
           <ListGroup>
-            {food.map(snack => (
-              <Link to={`${path}/${snack.id}`} key={snack.id}>
-                <ListGroupItem>{snack.name}</ListGroupItem>
-              </Link>
-            ))}
+            {path==="snacks" ?  returnSnacks() : returnDrinks()}
           </ListGroup>
         </CardBody>
       </Card>

@@ -1,20 +1,29 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Card, CardBody, CardTitle, Table } from "reactstrap";
-
-function Home({snacks, drinks}) {
-
+import SnackOrBoozeApi from "./Api";
+function Home() {
+  const [snacks, setSnacks] = useState([]);
+  const [drinks, setDrinks] = useState([]);
+  useEffect(() => {
+    const getFood = async () => {
+      const apiFood = await SnackOrBoozeApi.getSnacks();
+      return setSnacks(apiFood);
+    };
+    const getDrinks = async () => {
+      const apiFood = await SnackOrBoozeApi.getDrinks();
+      return setDrinks(apiFood);
+    };
+    getFood();
+    getDrinks();
+  }, []);
   return (
     <section className="col-md-8">
       <Card>
         <CardBody className="text-center">
-          <CardTitle>
-            <h3 className="font-weight-bold">
-              Welcome to Silicon Valley's premier dive cafe!
-            </h3>
-
-          </CardTitle>
-            <p>Our menu includes {snacks.length} snacks and {drinks.length} drinks.</p>
-          
+          <CardTitle>Welcome to Silicon Valley's premier dive cafe!</CardTitle>
+          <p>
+            Our menu includes {snacks.length} snacks and {drinks.length} drinks.
+          </p>
         </CardBody>
       </Card>
     </section>

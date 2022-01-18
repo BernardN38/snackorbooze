@@ -12,7 +12,6 @@ function App() {
   const [isLoading, setIsLoading] = useState(true);
   const [snacks, setSnacks] = useState([]);
   const [drinks, setDrinks] = useState([]);
-  const [newItems, setNewItems] = useState({snacks:[],drinks:[]});
   useEffect(() => {
     async function getSnacks() {
       let snacks = await SnackOrBoozeApi.getSnacks();
@@ -31,7 +30,7 @@ function App() {
   if (isLoading) {
     return <p>Loading &hellip;</p>;
   }
-  console.log(newItems);
+
   return (
     <div className="App">
       <BrowserRouter>
@@ -39,22 +38,22 @@ function App() {
         <main>
           <Switch>
             <Route exact path="/">
-              <Home snacks={[...snacks, ...newItems.snacks]} drinks={[...drinks, ...newItems.drinks]}/>
+              <Home />
             </Route>
             <Route exact path="/snacks">
-              <Menu food={[...snacks, ...newItems.snacks]} path="snacks"title="Snacks" />
+              <Menu  path="snacks"title="Snacks" />
             </Route>
             <Route exact path="/drinks">
-              <Menu food={[...drinks, ...newItems.drinks]} path="/drinks" title="Drinks" />
+              <Menu  path="/drinks" title="Drinks" />
             </Route>
             <Route path="/snacks/:id">
-              <Snack items={[...snacks, ...newItems.snacks]} cantFind="/snacks" />
+              <Snack cantFind="/snacks" />
             </Route>
             <Route path="/drinks/:id">
-              <Snack items={[...drinks, ...newItems.drinks]} cantFind="/snacks" />
+              <Snack  cantFind="/snacks" />
             </Route>
             <Route path="/additem">
-              <Form newItems={newItems} setNewItems={setNewItems} />
+              <Form  />
             </Route>
             <Route>
               <p>Page Not Found</p>
